@@ -46,9 +46,9 @@
                 method: 'POST',
                 body: formData
             })
-            .then(response => response.text())
+            .then(response => response.text()) // JSON yerine HTML döndürüyoruz
             .then(data => {
-                document.getElementById('download-link').innerHTML = data;
+                document.getElementById('download-link').innerHTML = data; // Dönen HTML'i göster
             })
             .catch(error => {
                 console.error('Error:', error);

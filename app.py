@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, send_file, jsonify
+from flask import Flask, request, render_template, send_file
 import openai
 import fitz  # PyMuPDF for PDF handling
 import os
@@ -61,7 +61,7 @@ def index():
 def upload_file():
     try:
         if 'project_pdf' not in request.files:
-            return jsonify({"error": "Dosya yüklenmedi"}), 400
+            return "Dosya yüklenmedi", 400
         
         project_pdf = request.files['project_pdf']
         
@@ -82,10 +82,13 @@ def upload_file():
         # Geçici proje dosyasını sil
         os.remove(project_path)
         
-        # İndirilebilir link sağla
-        return jsonify({"message": "Analiz tamamlandı!", "download_url": "/download"}), 200
+        # Tıklanabilir bir link döndür
+        return f'''
+        <p>Analiz tamamlandı! Aşağıdaki bağlantıdan sonucu indirebilirsiniz:</p>
+        <a href="/download" style="color: white; text-decoration: underline;">Sonucu İndir</a>
+        '''
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        return f"Hata: {str(e)}", 500
 
 # Sonuç dosyasını indirme
 @app.route('/download')
@@ -94,7 +97,7 @@ def download_file():
         result_file_path = os.path.join(os.getcwd(), "result.txt")
         return send_file(result_file_path, as_attachment=True)
     except Exception as e:
-        return jsonify({"error": f"Dosya indirilemedi: {str(e)}"}), 500
+        return f"Dosya indirilemedi: {str(e)}", 500
 
 if __name__ == '__main__':
     # Sunucuyu tüm IP adreslerine açık hale getirmek için host parametresini ekledik
