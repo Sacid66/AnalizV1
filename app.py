@@ -12,9 +12,6 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 
 app = Flask(__name__)
 
-# Sistemdeki 'puantaj.pdf' dosyasının yolunu belirtin
-PUNTUATION_FILE_PATH = os.path.join(os.getcwd(), "puantaj.pdf")
-
 # PDF dosyasını metne dönüştüren yardımcı fonksiyon
 def pdf_to_text(file_path):
     try:
@@ -26,10 +23,10 @@ def pdf_to_text(file_path):
     except Exception as e:
         return f"Hata: {str(e)}"
 
-# OpenAI API'ye projeyi ve puantaj dökümanını gönderen fonksiyon
-def analyze_project_with_punctuation(project_text, punctuation_text):
+# OpenAI API'ye projeyi gönderen fonksiyon
+def analyze_project(project_text):
     try:
-        prompt = f"Dosyadaki projeyi  puantaj tablosuna göre güçlü ve zayıf yönleri ile 'detaylı bir şekilde' açıklamalı olarak puanla. Puan kırılacak yerde puanı kır, çekinme yani çok düşük puanlar da verebilirsin, gerçekçi olsun sonuç.\n\nProje:\n{project_text}\n\nPuanlama Kriterleri:\n{punctuation_text}"
+        prompt = f"Bu proje içeriğini detaylı şekilde analiz et ve 'güçlü/zayıf' yönlerini özetle, ve  anlat.\n\n{project_text}"
         
         response = openai.ChatCompletion.create(
             model="gpt-4-turbo",
@@ -70,11 +67,8 @@ def upload_file():
         project_pdf.save(project_path)
         project_text = pdf_to_text(project_path)
         
-        # Puantaj dökümanını yükle ve metne çevir
-        punctuation_text = pdf_to_text(PUNTUATION_FILE_PATH)
-        
         # OpenAI API'ye gönder ve yanıt al
-        result_text = analyze_project_with_punctuation(project_text, punctuation_text)
+        result_text = analyze_project(project_text)
         
         # Sonucu metin dosyası olarak kaydet
         result_text_path = save_result_as_text(result_text)
