@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proje Yükleme</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <!-- Dosya yüklendi mesajı -->
+        <div id="upload-message" class="hidden">Dosya yüklendi!</div>
+        
+        <form id="upload-form">
+            <!-- Dosya seçme için özel bir buton -->
+            <label for="file-input" id="custom-file-label">Dosya Seç</label>
+            <input type="file" name="project_pdf" id="file-input" />
+
+            <!-- Gönder butonu ve yükleniyor göstergesi -->
+            <div class="button-container">
+                <button type="button" id="submit-button" onclick="uploadFile()">Gönder</button>
+                <div id="loading-indicator" class="hidden"></div>
+            </div>
+        </form>
+        <div id="download-link"></div>
+    </div>
+
+    <script>
+        // Dosya seçildiğinde mesajı göster
+        document.getElementById("file-input").addEventListener("change", function() {
+            document.getElementById("upload-message").classList.remove("hidden");
+        });
+
+        function uploadFile() {
+            // Gönder butonuna basıldığında mesajı gizle
+            document.getElementById('upload-message').classList.add('hidden');
+
+            // Yükleniyor göstergesini görünür yap
+            document.getElementById('loading-indicator').classList.remove('hidden');
+            
+            const form = document.getElementById('upload-form');
+            const formData = new FormData(form);
+
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('download-link').innerHTML = data;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            })
+            .finally(() => {
+                // İşlem bittiğinde yükleniyor göstergesini gizle
+                document.getElementById('loading-indicator').classList.add('hidden');
+            });
+        }
+    </script>
+</body>
+</html>

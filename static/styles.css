@@ -1,0 +1,97 @@
+/* Genel ayarlar */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #000;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Merkezdeki kutu */
+.container {
+    text-align: center;
+}
+
+/* Dosya yüklendi mesajı */
+#upload-message {
+    color: #4CAF50; /* Yeşil renk */
+    font-size: 18px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.hidden {
+    display: none; /* Başlangıçta gizli olacak */
+}
+
+/* Dosya seçme butonu */
+#file-input {
+    display: none;
+}
+
+#custom-file-label {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #fff;
+    color: #000;
+    border: none;
+    border-radius: 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 10px auto;
+    width: 150px; /* Sabit genişlik */
+    text-align: center;
+    white-space: nowrap; /* Taşma durumunda metni tek satırda tut */
+    overflow: hidden; /* Taşan kısmı gizle */
+    text-overflow: ellipsis; /* Dosya adı uzun olursa "..." ile göster */
+}
+
+/* Buton ve yükleniyor göstergesi için dikey hizalama */
+.button-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+/* Gönder butonu */
+#submit-button {
+    display: block;
+    padding: 10px 20px;
+    background-color: #fff;
+    color: #000;
+    border: none;
+    border-radius: 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+#submit-button:hover,
+#custom-file-label:hover {
+    background-color: #ddd;
+}
+
+/* Yükleniyor göstergesi */
+#loading-indicator {
+    width: 24px;
+    height: 24px;
+    border: 3px solid #fff;
+    border-top: 3px solid #000;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-top: 10px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
