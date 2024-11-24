@@ -26,7 +26,7 @@ def pdf_to_text(file_path):
 # OpenAI API'ye projeyi gönderen fonksiyon
 def analyze_project(project_text):
     try:
-        prompt = f"Bu proje içeriğini detaylı şekilde analiz et ve 'güçlü/zayıf' yönlerini özetle, ve  anlat.\n\n{project_text}"
+        prompt = f"Bu pdf'deki içeriği 'güçlü/zayıf' yönlerini özetle, ve  çok detaylıca yaz, anlat.\n\n{project_text}"
         
         response = openai.ChatCompletion.create(
             model="gpt-4-turbo",
