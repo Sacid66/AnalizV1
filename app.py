@@ -31,7 +31,7 @@ def analyze_project(project_text):
         response = openai.ChatCompletion.create(
             model="gpt-4-turbo",
             messages=[{"role": "user", "content": prompt}],
-            max_tokens=5000
+            max_tokens=4000
         )
         
         return response.choices[0].message['content']
