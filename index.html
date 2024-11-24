@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Proje Yükleme</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <!-- CSS Bağlantısı -->
+    <link rel="stylesheet" href="/AnalizV1/static/styles.css">
 </head>
 <body>
     <div class="container">
         <!-- Dosya yüklendi mesajı -->
         <div id="upload-message" class="hidden">Dosya yüklendi!</div>
-        
+
         <form id="upload-form">
             <!-- Dosya seçme için özel bir buton -->
             <label for="file-input" id="custom-file-label">Dosya Seç</label>
@@ -37,7 +38,7 @@
 
             // Yükleniyor göstergesini görünür yap
             document.getElementById('loading-indicator').classList.remove('hidden');
-            
+
             const form = document.getElementById('upload-form');
             const formData = new FormData(form);
 
