@@ -4,15 +4,14 @@ import fitz  # PyMuPDF for PDF handling
 import os
 from dotenv import load_dotenv
 
-# .env dosyasını yükle
 load_dotenv()
 
-# OpenAI API anahtarını .env'den al
+
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 app = Flask(__name__)
 
-# PDF dosyasını metne dönüştüren yardımcı fonksiyon
+
 def pdf_to_text(file_path):
     try:
         text = ""
@@ -23,10 +22,10 @@ def pdf_to_text(file_path):
     except Exception as e:
         return f"Hata: {str(e)}"
 
-# OpenAI API'ye projeyi gönderen fonksiyon
+
 def analyze_project(project_text):
     try:
-        prompt = f"Bu pdf'deki içeriğin 'güçlü/zayıf' yönlerini, nedenleriyle profesyonel bir dille analiz ederek çok detaylıca yaz, anlat, adım adım\n\n{project_text}"
+        prompt = f"Projenin güçlü ve zayıf yönlerini proje rehberlerini esas alarak özetle.\n\n{project_text}"
         
         response = openai.ChatCompletion.create(
             model="gpt-4-turbo",
@@ -38,7 +37,7 @@ def analyze_project(project_text):
     except Exception as e:
         return f"Hata: {str(e)}"
 
-# Sonucu metin dosyası olarak kaydetme fonksiyonu
+
 def save_result_as_text(content):
     try:
         result_text_path = os.path.join(os.getcwd(), "result.txt")
@@ -48,12 +47,12 @@ def save_result_as_text(content):
     except Exception as e:
         return f"Hata: {str(e)}"
 
-# Ana sayfa - Dosya yükleme formu
+
 @app.route('/')
 def index():
     return render_template("index.html")
 
-# PDF yükleme ve analiz işlemi
+
 @app.route('/upload', methods=['POST'])
 def upload_file():
     try:
@@ -62,21 +61,21 @@ def upload_file():
         
         project_pdf = request.files['project_pdf']
         
-        # Proje dosyasını geçici bir yere kaydet ve metne çevir
+
         project_path = os.path.join(os.getcwd(), "temp_project.pdf")
         project_pdf.save(project_path)
         project_text = pdf_to_text(project_path)
         
-        # OpenAI API'ye gönder ve yanıt al
+
         result_text = analyze_project(project_text)
         
-        # Sonucu metin dosyası olarak kaydet
+
         result_text_path = save_result_as_text(result_text)
         
-        # Geçici proje dosyasını sil
+
         os.remove(project_path)
         
-        # Tıklanabilir bir link döndür
+
         return f'''
         <p>Analiz tamamlandı! Aşağıdaki bağlantıdan sonucu indirebilirsiniz:</p>
         <a href="/download" style="color: white; text-decoration: underline;">Sonucu İndir</a>
@@ -84,7 +83,7 @@ def upload_file():
     except Exception as e:
         return f"Hata: {str(e)}", 500
 
-# Sonuç dosyasını indirme
+
 @app.route('/download')
 def download_file():
     try:
@@ -94,5 +93,4 @@ def download_file():
         return f"Dosya indirilemedi: {str(e)}", 500
 
 if __name__ == '__main__':
-    # Sunucuyu tüm IP adreslerine açık hale getirmek için host parametresini ekledik
     app.run(debug=True, host="0.0.0.0", port=5000)
