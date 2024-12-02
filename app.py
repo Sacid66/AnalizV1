@@ -6,7 +6,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 app = Flask(__name__)
@@ -25,12 +24,25 @@ def pdf_to_text(file_path):
 
 def analyze_project(project_text):
     try:
-        prompt = f"Projenin güçlü ve zayıf yönlerini proje rehberlerini esas alarak özetle.\n\n{project_text}"
+        # Daha karmaşık ve uzun bir prompt ile token kullanımı artırılıyor
+        prompt = f"""
+        Detaylı bir analiz yaparak aşağıdaki projeyi değerlendir:
+        
+        1. Projenin güçlü yönlerini detaylandır.
+        2. Projenin zayıf yönlerini, eksikliklerini ve olası geliştirme noktalarını açıkla.
+        3. Projeyi geliştirirken kullanılabilecek metodolojilerden, araçlardan ve tekniklerden örnekler ver.
+        4. Projenin sonuçlarının ve etkilerinin uzun vadeli tahminini yap.
+        
+        Proje Metni:
+        {project_text}
+        
+        Lütfen mümkün olduğunca detaylı, profesyonel ve akademik bir dil kullanarak yanıt ver.
+        """
         
         response = openai.ChatCompletion.create(
-            model="gpt-4-turbo",
+            model="gpt-4",  # Daha pahalı olan model
             messages=[{"role": "user", "content": prompt}],
-            max_tokens=4000
+            max_tokens=6000  # Daha fazla token kullanımı için sınır artırıldı
         )
         
         return response.choices[0].message['content']
