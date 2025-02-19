@@ -1,6 +1,6 @@
 from flask import Flask, request, render_template, send_file
 import openai
-import fitz  # PyMuPDF for PDF handling
+import fitz  
 import os
 from dotenv import load_dotenv
 
@@ -24,7 +24,7 @@ def pdf_to_text(file_path):
 
 def analyze_project(project_text):
     try:
-        # Daha karmaşık ve uzun bir prompt ile token kullanımı artırılıyor
+       
         prompt = f"""
         Detaylı bir analiz yaparak aşağıdaki projeyi değerlendir:
         
@@ -40,9 +40,9 @@ def analyze_project(project_text):
         """
         
         response = openai.ChatCompletion.create(
-            model="gpt-4",  # Daha pahalı olan model
+            model="gpt-4",  
             messages=[{"role": "user", "content": prompt}],
-            max_tokens=6000  # Daha fazla token kullanımı için sınır artırıldı
+            max_tokens=6000  
         )
         
         return response.choices[0].message['content']
